@@ -1,3 +1,5 @@
+https://warm-frangipane-31d686.netlify.app
+
 # bootstrap-vue-app
 
 ## Project setup
