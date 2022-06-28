@@ -1,76 +1,23 @@
 <template>
   <b-container>
     <b-row align-v="center">
-      <job-card v-for="job in jobs" :key="job.id" :name="job.name"></job-card>
-      <!--      <b-col md="3">-->
-      <!--        <b-card-->
-      <!--          title="This is a card"-->
-      <!--          img-src="https://i.picsum.photos/id/1014/6016/4000.jpg?hmac=yMXsznFliL_Y2E2M-qZEsOZE1micNu8TwgNlHj7kzs8"-->
-      <!--          img-alt="Job-info"-->
-      <!--          img-top-->
-      <!--          tag="article"-->
-      <!--          style="max-width: 20rem"-->
-      <!--          class="mb-2"-->
-      <!--        >-->
-      <!--          <b-card-text>-->
-      <!--            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor,-->
-      <!--            nam.-->
-      <!--          </b-card-text>-->
-      <!--          <b-button variant="primary">Apply</b-button>-->
-      <!--        </b-card>-->
-      <!--      </b-col>-->
-      <!--      <b-col md="3">-->
-      <!--        <b-card-->
-      <!--          title="This is a card"-->
-      <!--          img-src="https://i.picsum.photos/id/1014/6016/4000.jpg?hmac=yMXsznFliL_Y2E2M-qZEsOZE1micNu8TwgNlHj7kzs8"-->
-      <!--          img-alt="Job-info"-->
-      <!--          img-top-->
-      <!--          tag="article"-->
-      <!--          style="max-width: 20rem"-->
-      <!--          class="mb-2"-->
-      <!--        >-->
-      <!--          <b-card-text>-->
-      <!--            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor,-->
-      <!--            nam.-->
-      <!--          </b-card-text>-->
-      <!--          <b-button variant="primary">Apply</b-button>-->
-      <!--        </b-card>-->
-      <!--      </b-col>-->
-      <!--      <b-col md="3">-->
-      <!--        <b-card-->
-      <!--          title="This is a card"-->
-      <!--          img-src="https://i.picsum.photos/id/1014/6016/4000.jpg?hmac=yMXsznFliL_Y2E2M-qZEsOZE1micNu8TwgNlHj7kzs8"-->
-      <!--          img-alt="Job-info"-->
-      <!--          img-top-->
-      <!--          tag="article"-->
-      <!--          style="max-width: 20rem"-->
-      <!--          class="mb-2"-->
-      <!--        >-->
-      <!--          <b-card-text>-->
-      <!--            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor,-->
-      <!--            nam.-->
-      <!--          </b-card-text>-->
-      <!--          <b-button variant="primary">Apply</b-button>-->
-      <!--        </b-card>-->
-      <!--      </b-col>-->
-      <!--      <b-col md="3">-->
-      <!--        <b-card-->
-      <!--          title="This is a card"-->
-      <!--          img-src="https://i.picsum.photos/id/1014/6016/4000.jpg?hmac=yMXsznFliL_Y2E2M-qZEsOZE1micNu8TwgNlHj7kzs8"-->
-      <!--          img-alt="Job-info"-->
-      <!--          img-top-->
-      <!--          tag="article"-->
-      <!--          style="max-width: 20rem"-->
-      <!--          class="mb-2"-->
-      <!--        >-->
-      <!--          <b-card-text>-->
-      <!--            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor,-->
-      <!--            nam.-->
-      <!--          </b-card-text>-->
-      <!--          <b-button variant="primary">Apply</b-button>-->
-      <!--        </b-card>-->
-      <!--      </b-col>-->
+      <job-card
+        v-for="job in displayJobs"
+        :key="job.id"
+        :name="job.name"
+        :pic="job.picture"
+      ></job-card>
     </b-row>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      first-text="First"
+      prev-text="Prev"
+      next-text="Next"
+      last-text="Last"
+      @input="paginate(currentPage)"
+    ></b-pagination>
   </b-container>
 </template>
 
@@ -88,14 +35,23 @@ export default {
   data() {
     return {
       jobs: [],
+      displayJobs: [],
+      currentPage: 1,
+      rows: 1,
+      perPage: 3,
     };
   },
   methods: {
     async fetchData() {
       const res = await fetch("jobs.json");
-      const val = res.json();
+      const val = await res.json();
       this.jobs = val;
-      console.log(this.jobs);
+      this.rows = this.jobs.length;
+      //console.log(this.jobs);
+    },
+    paginate(currentPage) {
+      const start = (currentPage - 1) * this.perPage;
+      this.displayJobs = this.jobs.slice(start, start + 3);
     },
   },
 };

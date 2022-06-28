@@ -2,7 +2,7 @@
   <b-col md="3">
     <b-card
       :title="name"
-      img-src="https://i.picsum.photos/id/1014/6016/4000.jpg?hmac=yMXsznFliL_Y2E2M-qZEsOZE1micNu8TwgNlHj7kzs8"
+      :img-src="pic"
       img-alt="Job-info"
       img-top
       tag="article"
@@ -21,7 +21,7 @@
 <script>
 export default {
   name: "jobCard",
-  props: ["name"],
+  props: ["name", "pic"],
 };
 </script>
 
